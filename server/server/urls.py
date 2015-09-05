@@ -13,16 +13,29 @@ Including another URLconf
     1. Add an import:  from blog import urls as blog_urls
     2. Add a URL to urlpatterns:  url(r'^blog/', include(blog_urls))
 """
-from django.conf.urls import include, url
+from django.conf.urls import include, patterns, url
 from django.contrib import admin
 
+# from .views import IndexView
+
+# urlpatterns = patterns(
+#     '',
+#     url(r'^$', IndexView.as_view(), name='index'),
+# )
 
 urlpatterns = [
     # url(r'^admin/', include(admin.site.urls)),
-    url(r'^', include('news.urls')),
+    url(r'^v1/', include('news.urls')),
 ]
 
 urlpatterns += [
     url(r'^api-auth/', include('rest_framework.urls',
                                namespace='rest_framework')),
 ]
+
+urlpatterns += patterns(
+    'django.contrib.staticfiles.views',
+    url(r'^(?:index.html)?$', 'serve', kwargs={'path': 'index.html'}),
+    url(r'^(?P<path>(?:js|css|img)/.*)$', 'serve'),
+)
+
